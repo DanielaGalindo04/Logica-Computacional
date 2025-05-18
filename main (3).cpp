@@ -1,0 +1,212 @@
+#include <iostream>
+using namespace std;
+
+struct perro {
+    string nombre;
+    string Raza;
+    int edad;
+    float puntaje;
+    string linkfoto;
+};
+
+struct dueño {
+    string nombre;
+    int identificación;
+    string telefono;
+    string correo;
+};
+
+struct inscripcion {
+    int iddeinscripcion;
+    string referenciaperro;
+    string referenciadueño;
+    string fechadeinscripcion;
+};
+
+struct raza {
+    string nombreraza;
+    string gruporaza;
+    string paisraza;
+};
+
+struct Exposición {
+    string nombredelaexposición;
+    string fechaexposición;
+    string ubicacióndelaexposición;
+    int numerodeperros;
+};
+
+struct juez {
+    string nombrejuez;
+    int identificación;
+    int experiencia;
+};
+
+struct puntaje {
+    float valorpuntaje;
+    string nombrejuez;
+    string datosperro;
+};
+
+int main() {
+    int x;
+    cout << "\n===== Bienvenido a PETLANDYA =====\n";
+    cout << "¿Cuántos perros quieres ingresar? ";
+    cin >> x;
+
+    perro listaperros[x];
+    dueño datosdueño[x];
+    inscripcion datosperroydueño[x];
+    raza datosraza[x];
+    Exposición datosexposición[1];
+    juez datosjuez[3];
+    int puntaje_vs_Jueces[x][3];
+
+    int opcion;
+
+    do {
+        cout << "\n===== MENÚ =====\n";
+        cout << "1. Ingresar perros\n";
+        cout << "2. Ingresar dueños\n";
+        cout << "3. Ingresar inscripciones\n";
+        cout << "4. Ingresar razas\n";
+        cout << "5. Ingresar exposiciones\n";
+        cout << "6. Ingresar jueces\n";
+        cout << "7. Ingresar puntajes\n";
+        cout << "8. Mostrar matriz de puntajes\n";
+        cout << "9. Salir\n";
+        cout << "====================\n";
+        cout << "Ingrese una opción: ";
+        cin >> opcion;
+        cin.ignore(); // Limpiar buffer
+
+        switch (opcion) {
+            case 1:
+                for (int i = 0; i < x; i++) {
+                    cout << "\nIngresar datos del perro #" << i + 1 << endl;
+                    cout << "Nombre del perro: ";
+                    getline(cin, listaperros[i].nombre);
+                    cout << "Raza del perro: ";
+                    getline(cin, listaperros[i].Raza);
+                    cout << "Edad del perro: ";
+                    cin >> listaperros[i].edad;
+                    cout << "Puntaje del perro: ";
+                    cin >> listaperros[i].puntaje;
+                    cin.ignore();
+                }
+                break;
+
+            case 2:
+                for (int i = 0; i < x; i++) {
+                    cout << "\nIngresar datos del dueño #" << i + 1 << endl;
+                    cout << "Nombre: ";
+                    getline(cin, datosdueño[i].nombre);
+                    cout << "Identificación: ";
+                    cin >> datosdueño[i].identificación;
+                    cin.ignore();
+                    cout << "Teléfono: ";
+                    getline(cin, datosdueño[i].telefono);
+                    cout << "Correo: ";
+                    getline(cin, datosdueño[i].correo);
+                }
+                break;
+
+            case 3:
+                for (int i = 0; i < x; i++) {
+                    cout << "\nIngresar datos de inscripción #" << i + 1 << endl;
+                    cout << "ID de inscripción: ";
+                    cin >> datosperroydueño[i].iddeinscripcion;
+                    cin.ignore();
+                    cout << "Referencia del perro: ";
+                    getline(cin, datosperroydueño[i].referenciaperro);
+                    cout << "Referencia del dueño: ";
+                    getline(cin, datosperroydueño[i].referenciadueño);
+                    cout << "Fecha de inscripción: ";
+                    getline(cin, datosperroydueño[i].fechadeinscripcion);
+                }
+                break;
+
+            case 4:
+                for (int i = 0; i < x; i++) {
+                    cout << "\nIngresar datos de la raza #" << i + 1 << endl;
+                    cout << "Nombre de la raza: ";
+                    getline(cin, datosraza[i].nombreraza);
+                    cout << "Grupo de la raza: ";
+                    getline(cin, datosraza[i].gruporaza);
+                    cout << "País de la raza: ";
+                    getline(cin, datosraza[i].paisraza);
+                }
+                break;
+
+            case 5:
+                cout << "\nIngresar datos de la exposición:\n";
+                cout << "Nombre de la exposición: ";
+                getline(cin, datosexposición[0].nombredelaexposición);
+                cout << "Fecha de la exposición: ";
+                getline(cin, datosexposición[0].fechaexposición);
+                cout << "Ubicación de la exposición: ";
+                getline(cin, datosexposición[0].ubicacióndelaexposición);
+                cout << "Número de perros: ";
+                cin >> datosexposición[0].numerodeperros;
+                cin.ignore();
+                break;
+
+            case 6:
+                for (int i = 0; i < 3; i++) {
+                    cout << "\nIngresar datos del juez #" << i + 1 << endl;
+                    cout << "Nombre del juez: ";
+                    getline(cin, datosjuez[i].nombrejuez);
+                    cout << "Identificación: ";
+                    cin >> datosjuez[i].identificación;
+                    cout << "Años de experiencia: ";
+                    cin >> datosjuez[i].experiencia;
+                    cin.ignore();
+                }
+                break;
+
+            case 7:
+                for (int i = 0; i < x; i++) {
+                    cout << "\nPuntajes para el perro: " << listaperros[i].nombre << endl;
+                    for (int j = 0; j < 3; j++) {
+                        cout << "Puntaje del juez " << datosjuez[j].nombrejuez << ": ";
+                        cin >> puntaje_vs_Jueces[i][j];
+                    }
+                }
+                break;
+
+         case 8:
+            cout << "\nMatriz de puntajes (Perros vs Jueces):\n\n";
+        
+            // Encabezado de tabla
+            cout << "PERROS\t";
+            for (int j = 0; j < 3; j++) {
+                cout << datosjuez[j].nombrejuez << "\t";
+            }
+            cout << endl;
+        
+            // Separador visual
+            cout << "---------------------------------------------\n";
+        
+            // Datos por cada perro
+            for (int i = 0; i < x; i++) {
+                cout << listaperros[i].nombre << "\t";
+                for (int j = 0; j < 3; j++) {
+                    cout << puntaje_vs_Jueces[i][j] << "\t";
+                }
+                cout << endl;
+            }
+            break;
+
+
+            case 9:
+                cout << "Gracias por usar PETLANDYA. ¡Hasta luego!\n";
+                break;
+
+            default:
+                cout << "Opción inválida, intente nuevamente.\n";
+                break;
+        }
+    } while (opcion != 9);
+
+    return 0;
+}
