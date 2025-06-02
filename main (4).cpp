@@ -1,0 +1,333 @@
+#include <iostream>
+using namespace std;
+
+struct perro {
+    string nombre;  
+    string Raza;
+    int edad;
+};
+
+struct dueno {
+    string nombre;
+    int identificacion;
+    string telefono;
+    string correo;
+};
+
+struct inscripcion {
+    int iddeinscripcion;
+    string referenciaperro;
+    string referenciadueno;
+    string fechadeinscripcion;
+};
+
+struct Exposicion {
+    string nombredelaexposicion;
+    string fechaexposicion;
+    string ubicaciondelexposicion;
+    int numerodeperros;
+};
+
+struct juez {
+    string nombrejuez;
+    int identificacion;
+    int experiencia;
+};
+
+void mostrarMatrizConPromedios(perro listaperros[], int puntaje[][3], juez datosjuez[], int totalPerros) {
+    cout << "\nMatriz de puntajes (Perros vs Jueces):\n\n";
+    cout << "PERROS\t";
+    for (int j = 0; j < 3; j++) {
+        cout << datosjuez[j].nombrejuez << "\t";
+    }
+    cout << "PROMEDIO\n";
+    cout << "-------------------------------------------------------------\n";
+
+    for (int i = 0; i < totalPerros; i++) {
+        cout << listaperros[i].nombre << "\t";
+        float suma = 0;
+        for (int j = 0; j < 3; j++) {
+            cout << puntaje[i][j] << "\t";
+            suma += puntaje[i][j];
+        }
+        float promedio = suma / 3.0;
+        cout << promedio << endl;
+    }
+}
+
+void mostrarGanador(perro listaperros[], int puntaje[][3], int totalPerros) {
+    float mayor_promedio = -1;
+    string nombre_ganador = "";
+    for (int i = 0; i < totalPerros; i++) {
+        float suma = 0;
+        for (int j = 0; j < 3; j++) {
+            suma += puntaje[i][j];
+        }
+        float promedio = suma / 3.0;
+        if (promedio > mayor_promedio) {
+            mayor_promedio = promedio;
+            nombre_ganador = listaperros[i].nombre;
+        }
+    }
+    cout << "El perro ganador es: " << nombre_ganador << " con un promedio de " << mayor_promedio << endl;
+}
+
+void mostrarPerroMasViejo(perro listaperros[], int totalPerros) {
+    if (totalPerros == 0) {
+        cout << "No hay perros registrados.\n";
+        return;
+    }
+
+    int mayor_edad = listaperros[0].edad;
+    string nombre_perro_mayor = listaperros[0].nombre;
+
+    for (int i = 1; i < totalPerros; i++) {
+        if (listaperros[i].edad > mayor_edad) {
+            mayor_edad = listaperros[i].edad;
+            nombre_perro_mayor = listaperros[i].nombre;
+        }
+    }
+
+    cout << "El perro más viejo es: " << nombre_perro_mayor << " con " << mayor_edad << " años\n";
+}
+
+void mostrarInformacionPerro(perro listaperros[], int& totalPerros) {
+    string nombre_buscar;
+    bool encontrado = false;
+    cout << "Ingrese el nombre del perro a buscar: ";
+    getline(cin, nombre_buscar);
+
+    for (int i = 0; i < totalPerros; i++) {
+        if (listaperros[i].nombre == nombre_buscar) {
+            cout << "\nInformación del perro encontrado:\n";
+            cout << "Nombre: " << listaperros[i].nombre << endl;
+            cout << "Raza: " << listaperros[i].Raza << endl;
+            cout << "Edad: " << listaperros[i].edad << " años" << endl;
+            encontrado = true;
+            break;
+        }
+    }
+
+    if (!encontrado) {
+        cout << "El perro no pertenece al concurso.\n";
+        cout << "¿Desea registrarlo? (1. Sí / 2. No): ";
+        int opcion;
+        cin >> opcion;
+        cin.ignore();
+
+        if (opcion == 1) {
+            cout << "Redirigiendo a la opción de registro...\n";
+            string nombre_perro;
+            cout << "Ingrese el nombre del perro: ";
+            getline(cin, nombre_perro);
+            cout << "Ingrese la raza del perro: ";
+            string raza;
+            getline(cin, raza);
+            cout << "Ingrese la edad del perro: ";
+            int edad;
+            cin >> edad;
+            cin.ignore();
+
+            listaperros[totalPerros].nombre = nombre_perro;
+            listaperros[totalPerros].Raza = raza;
+            listaperros[totalPerros].edad = edad;
+            totalPerros++;
+            cout << "El perro ha sido registrado exitosamente.\n";
+        } else {
+            cout << "No se registró el perro.\n";
+        }
+    }
+}
+
+void mostrarPerroConMenorPuntaje(perro listaperros[], int puntaje[][3], int totalPerros) {
+    float menor_promedio = 99999;
+    string nombre_perro_menor = "";
+    for (int i = 0; i < totalPerros; i++) {
+        float suma = 0;
+        for (int j = 0; j < 3; j++) {
+            suma += puntaje[i][j];
+        }
+        float promedio = suma / 3.0;
+        if (promedio < menor_promedio) {
+            menor_promedio = promedio;
+            nombre_perro_menor = listaperros[i].nombre;
+        }
+    }
+    cout << "El perro con el menor puntaje es: " << nombre_perro_menor << " con un promedio de " << menor_promedio << endl;
+}
+
+void mostrarMenu() {
+    perro listaperros[100];
+    dueno datosdueno[100];
+    inscripcion datosperroydueño[100];
+    Exposicion datosexposicion[1];
+    juez datosjuez[3];
+    int puntaje[100][3];
+    int perrosRegistrados = 0;
+
+    int opcion;
+
+    cout << "\n===== Bienvenido a PETLANDYA =====\n";
+
+    do {
+        cout << "\n===== MENÚ =====\n";
+        cout << "1. Ingresar perros\n";
+        cout << "2. Ingresar duenos\n";
+        cout << "3. Ingresar inscripciones\n";
+        cout << "4. Ingresar exposiciones\n";
+        cout << "5. Ingresar jueces\n";
+        cout << "6. Ingresar puntajes\n";
+        cout << "7. Mostrar matriz de puntajes y promedios\n";
+        cout << "8. Mostrar perro ganador\n";
+        cout << "9. Mostrar perro más viejo\n";
+        cout << "10. Buscar información de un perro\n";
+        cout << "11. Mostrar perro con el menor puntaje\n";
+        cout << "12. Salir\n";
+        cout << "====================\n";
+        cout << "Ingrese una opción: ";
+        cin >> opcion;
+        cin.ignore();
+
+        if (opcion != 1 && opcion != 12 && perrosRegistrados == 0) {
+            cout << "Primero debes ingresar al menos un perro antes de continuar.\n";
+            continue;
+        }
+
+        switch (opcion) {
+            case 1: {
+                int cantidadAgregar;
+                cout << "\n¿Cuántos perros deseas ingresar? ";
+                cin >> cantidadAgregar;
+                cin.ignore();
+
+                for (int i = 0; i < cantidadAgregar; i++) {
+                    cout << "\nIngresar datos del perro #" << i + 1 << endl;
+                    cout << "Nombre del perro: ";
+                    getline(cin, listaperros[perrosRegistrados].nombre);
+                    cout << "Raza del perro: ";
+                    getline(cin, listaperros[perrosRegistrados].Raza);
+                    cout << "Edad del perro: ";
+                    cin >> listaperros[perrosRegistrados].edad;
+                    cin.ignore();
+                    perrosRegistrados++;
+                }
+                break;
+            }
+
+            case 2:
+                for (int i = 0; i < perrosRegistrados; i++) {
+                    cout << "\nIngresar datos del dueno #" << i + 1 << endl;
+                    cout << "Nombre: ";
+                    getline(cin, datosdueno[i].nombre);
+                    cout << "Identificacion: ";
+                    cin >> datosdueno[i].identificacion;
+                    cin.ignore();
+                    cout << "Telefono: ";
+                    getline(cin, datosdueno[i].telefono);
+                    cout << "Correo: ";
+                    getline(cin, datosdueno[i].correo);
+                }
+                break;
+
+            case 3:
+                for (int i = 0; i < perrosRegistrados; i++) {
+                    cout << "\nIngresar datos de inscripcion #" << i + 1 << endl;
+                    cout << "ID de inscripcion: ";
+                    cin >> datosperroydueño[i].iddeinscripcion;
+                    cin.ignore();
+                    cout << "Referencia del perro: ";
+                    getline(cin, datosperroydueño[i].referenciaperro);
+                    cout << "Referencia del dueno: ";
+                    getline(cin, datosperroydueño[i].referenciadueno);
+                    cout << "Fecha de inscripcion: ";
+                    getline(cin, datosperroydueño[i].fechadeinscripcion);
+                }
+                break;
+
+            case 4:
+                cout << "\nIngresar datos de la exposicion:\n";
+                cout << "Nombre de la exposicion: ";
+                getline(cin, datosexposicion[0].nombredelaexposicion);
+                cout << "Fecha de la exposicion: ";
+                getline(cin, datosexposicion[0].fechaexposicion);
+                cout << "Ubicacion de la exposicion: ";
+                getline(cin, datosexposicion[0].ubicaciondelexposicion);
+                cout << "Numero de perros: ";
+                cin >> datosexposicion[0].numerodeperros;
+                cin.ignore();
+                break;
+
+            case 5:
+                for (int i = 0; i < 3; i++) {
+                    cout << "\nIngresar datos del juez #" << i + 1 << endl;
+                    cout << "Nombre del juez: ";
+                    getline(cin, datosjuez[i].nombrejuez);
+                    cout << "Identificacion del juez: ";
+                    cin >> datosjuez[i].identificacion;
+                    cout << "Experiencia (en años): ";
+                    cin >> datosjuez[i].experiencia;
+                    cin.ignore();
+                }
+                break;
+
+            case 6:
+                for (int i = 0; i < perrosRegistrados; i++) {
+                    cout << "\nIngresar puntajes para el perro #" << i + 1 << " (" << listaperros[i].nombre << "):\n";
+                    for (int j = 0; j < 3; j++) {
+                        cout << "Puntaje del juez " << datosjuez[j].nombrejuez << ": ";
+                        cin >> puntaje[i][j];
+                    }
+                }
+                break;
+
+            case 7:
+                mostrarMatrizConPromedios(listaperros, puntaje, datosjuez, perrosRegistrados);
+                break;
+
+            case 8:
+                mostrarGanador(listaperros, puntaje, perrosRegistrados);
+                break;
+
+            case 9:
+                mostrarPerroMasViejo(listaperros, perrosRegistrados);
+                break;
+
+            case 10:
+                mostrarInformacionPerro(listaperros, perrosRegistrados);
+                break;
+
+            case 11:
+                mostrarPerroConMenorPuntaje(listaperros, puntaje, perrosRegistrados);
+                break;
+
+            case 12:
+                cout << "Gracias por usar PETLANDYA. ¡Hasta luego!" << endl;
+                break;
+
+            default:
+                cout << "Opción no válida. Intente de nuevo." << endl;
+        }
+
+    } while (opcion != 12);
+}
+
+int main() {
+    cout << "===== BIENVENIDO A PETLANDYA =====\n";
+    cout << "AUTORES:\n";
+    cout << "Leidy Daniela Galindo Letrado\n";
+    cout << "Nicol Dayana Serna Castañeda\n";
+    cout << "Karen Daniela Arcos López\n";
+
+    int eleccion;
+    cout << "\n¿Deseas ingresar al menú principal?\n1. Sí\n2. No\nIngrese opción: ";
+    cin >> eleccion;
+    cin.ignore();
+
+    if (eleccion == 1) {
+        mostrarMenu();
+    } else {
+        cout << "Programa finalizado.\n";
+    }
+
+    return 0;
+}
